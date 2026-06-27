@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plate Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <h1>Plate Calculator</h1>
+    <section class="form-section">
+      <label for="base-level">Nível base</label>
+      <select id="base-level">
+        <option value="5">5</option>
+        <option value="20">20</option>
+        <option value="30">30</option>
+        <option value="50">50</option>
+        <option value="65">65</option>
+        <option value="80">80</option>
+        <option value="95">95</option>
+      </select>
+
+      <label for="current-level">Nível atual</label>
+      <input id="current-level" type="number" min="5" max="100" value="50" />
+
+      <label for="success-rate">Chance de sucesso (%)</label>
+      <input id="success-rate" type="number" min="0" max="100" value="70" />
+
+      <button id="calculate">Calcular</button>
+    </section>
+
+    <section id="results" class="results hidden">
+      <h2>Resultados</h2>
+      <div class="result-row">
+        <span>Cenário</span>
+        <span>Treinos</span>
+        <span>Plates</span>
+      </div>
+      <div class="result-row">
+        <span>100% Sucesso</span>
+        <span id="success-treinos">-</span>
+        <span id="success-plates">-</span>
+      </div>
+      <div class="result-row">
+        <span>100% Falha</span>
+        <span id="fail-treinos">-</span>
+        <span id="fail-plates">-</span>
+      </div>
+      <div class="result-row average">
+        <span>Média Monte Carlo</span>
+        <span id="avg-treinos">-</span>
+        <span id="avg-plates">-</span>
+      </div>
+    </section>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
