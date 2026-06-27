@@ -122,7 +122,7 @@ calculateButton.addEventListener('click', () => {
   successPlates.textContent = successResult.plates;
   failTreinos.textContent = failResult.trainings;
   failPlates.textContent = failResult.plates;
-  avgTreinos.textContent = averageResult.trainings.toFixed(2);
+  avgTreinos.textContent = averageResult.trainings;
   avgPlates.textContent = averageResult.plates;
 
   resultsSection.classList.remove('hidden');
