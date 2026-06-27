@@ -104,6 +104,18 @@ calculateButton.addEventListener('click', () => {
 
   const successResult = deterministic(baseValue, currentValue, true);
   const failResult = deterministic(baseValue, currentValue, false);
+
+  if (successValue === 1) {
+    successTreinos.textContent = successResult.trainings;
+    successPlates.textContent = successResult.plates;
+    failTreinos.textContent = failResult.trainings;
+    failPlates.textContent = failResult.plates;
+    avgTreinos.textContent = successResult.trainings;
+    avgPlates.textContent = successResult.plates;
+    resultsSection.classList.remove('hidden');
+    return;
+  }
+
   const averageResult = calculateAverage(baseValue, currentValue, successValue);
 
   successTreinos.textContent = successResult.trainings;
