@@ -88,7 +88,7 @@ function calculateAverage(baseLevelValue, currentLevelValue, successRateValue) {
 
   return {
     plates: totalPlates / simulations,
-    trainings: totalTrainings / simulations,
+    trainings: Math.ceil(totalTrainings / simulations),
   };
 }
 
@@ -110,7 +110,7 @@ calculateButton.addEventListener('click', () => {
   successPlates.textContent = successResult.plates;
   failTreinos.textContent = failResult.trainings;
   failPlates.textContent = failResult.plates;
-  avgTreinos.textContent = averageResult.trainings.toFixed(2);
+  avgTreinos.textContent = averageResult.trainings;
   avgPlates.textContent = averageResult.plates.toFixed(2);
 
   resultsSection.classList.remove('hidden');
