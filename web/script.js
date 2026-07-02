@@ -51,44 +51,56 @@ function deterministic(baseLevelValue, currentLevelValue, success) {
   return { plates, trainings };
 }
 
-function simulate(baseLevelValue, currentLevelValue, successRateValue) {
-  const gains = getGains(baseLevelValue);
-
-  let level = currentLevelValue;
-  let exp = 0;
-  let plates = 0;
-  let trainings = 0;
-
-  while (level < 100) {
-    plates += platesPorTreino(level);
-    trainings += 1;
-
-    const gain = Math.random() < successRateValue ? gains.success : gains.fail;
-    exp += gain;
-
-    while (exp >= 100 && level < 100) {
-      exp -= 100;
-      level += 1;
-    }
-  }
-
-  return { plates, trainings };
-}
-
 function calculateAverage(baseLevelValue, currentLevelValue, successRateValue) {
-  const simulations = 2000;
-  let totalPlates = 0;
-  let totalTrainings = 0;
+  const gains = getGains(baseLevelValue);
+  const successProbability = successRateValue;
+  const failProbability = 1 - successRateValue;
+  const memo = new Map();
 
-  for (let i = 0; i < simulations; i += 1) {
-    const result = simulate(baseLevelValue, currentLevelValue, successRateValue);
-    totalPlates += result.plates;
-    totalTrainings += result.trainings;
+  function advanceLevel(level, exp, gain) {
+    let nextLevel = level;
+    let nextExp = exp + gain;
+
+    while (nextExp >= 100 && nextLevel < 100) {
+      nextExp -= 100;
+      nextLevel += 1;
+    }
+
+    return { level: nextLevel, exp: nextExp };
   }
+
+  function expectedOutcome(level, exp) {
+    const memoKey = `${level}:${exp}`;
+    if (memo.has(memoKey)) {
+      return memo.get(memoKey);
+    }
+
+    if (level >= 100) {
+      const result = { plates: 0, trainings: 0 };
+      memo.set(memoKey, result);
+      return result;
+    }
+
+    const platesReward = platesPorTreino(level);
+    const successState = advanceLevel(level, exp, gains.success);
+    const failState = advanceLevel(level, exp, gains.fail);
+    const successResult = expectedOutcome(successState.level, successState.exp);
+    const failResult = expectedOutcome(failState.level, failState.exp);
+
+    const result = {
+      plates: platesReward + (successProbability * successResult.plates) + (failProbability * failResult.plates),
+      trainings: 1 + (successProbability * successResult.trainings) + (failProbability * failResult.trainings),
+    };
+
+    memo.set(memoKey, result);
+    return result;
+  }
+
+  const result = expectedOutcome(currentLevelValue, 0);
 
   return {
-    plates: Math.ceil(totalPlates / simulations),
-    trainings: Math.ceil(totalTrainings / simulations),
+    plates: Math.round(result.plates),
+    trainings: Math.round(result.trainings),
   };
 }
 
